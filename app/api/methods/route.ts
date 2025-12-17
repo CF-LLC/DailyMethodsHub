@@ -2,6 +2,9 @@ import { NextRequest, NextResponse } from 'next/server'
 import { createClient } from '@/lib/supabase/server'
 import { requireAdmin } from '@/lib/auth'
 
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+
 // GET /api/methods - List all methods
 export async function GET(request: NextRequest) {
   try {

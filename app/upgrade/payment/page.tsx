@@ -7,6 +7,9 @@ import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
 import { ArrowLeft, Bitcoin, Zap, Check, Copy } from 'lucide-react'
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner'
 
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+
 export const metadata = {
   title: 'Payment | Daily Methods Hub',
   description: 'Complete your premium upgrade',

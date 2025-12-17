@@ -5,6 +5,9 @@ import { Button } from '@/components/ui/Button'
 import { TrendingUp, Shield, Zap } from 'lucide-react'
 import { FloatingIcons } from '@/components/FloatingIcons'
 
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+
 export default async function Home() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
