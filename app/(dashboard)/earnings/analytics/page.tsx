@@ -8,6 +8,9 @@ import AmountDistribution from '@/components/earnings/AmountDistribution'
 import TrendChart from '@/components/earnings/TrendChart'
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner'
 
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title: 'Earnings Analytics | Daily Methods Hub',
   description: 'Detailed analytics and insights about your earnings',

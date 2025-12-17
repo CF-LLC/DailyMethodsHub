@@ -1,6 +1,9 @@
 import { MetadataRoute } from 'next'
 import { getPublicMethods } from '@/app/actions/public-methods'
 
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://dailymethodshub.com'
 

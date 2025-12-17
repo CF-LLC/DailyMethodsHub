@@ -4,6 +4,9 @@ import { getPublicMethods } from '@/app/actions/explore'
 import ReferralHubList from '@/components/referral-hub/ReferralHubList'
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner'
 
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title: 'Referral Hub',
   description: 'Discover methods with exclusive referral codes and earn more together',

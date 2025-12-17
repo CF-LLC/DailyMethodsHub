@@ -4,6 +4,9 @@ import { getUserNotifications } from '@/app/actions/notifications'
 import NotificationsPageContent from '@/components/notifications/NotificationsPageContent'
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner'
 
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title: 'Notifications',
   description: 'View all your notifications',

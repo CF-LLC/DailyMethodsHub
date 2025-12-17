@@ -10,6 +10,9 @@ import { RecentMethods } from '@/components/dashboard/RecentMethods'
 import { QuickActions } from '@/components/dashboard/QuickActions'
 import ManualVerificationForm from '@/components/ManualVerificationForm'
 
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title: 'Admin Dashboard',
   description: 'Admin-only dashboard for managing all methods',

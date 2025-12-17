@@ -8,6 +8,9 @@ import { AvailableTasks } from '@/components/dashboard/AvailableTasks'
 import { RecentMethods } from '@/components/dashboard/RecentMethods'
 import { QuickActions } from '@/components/dashboard/QuickActions'
 
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title: 'Dashboard',
   description: 'Admin dashboard for managing daily earning methods',

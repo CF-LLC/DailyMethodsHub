@@ -2,6 +2,10 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  eslint: {
+    // Disable deprecated ESLint options during build
+    ignoreDuringBuilds: false,
+  },
   images: {
     remotePatterns: [
       {
