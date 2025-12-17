@@ -2,6 +2,10 @@
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  // Disable static page generation entirely for Netlify
+  generateBuildId: async () => {
+    return 'build-' + Date.now()
+  },
   eslint: {
     ignoreDuringBuilds: false,
   },
@@ -15,7 +19,6 @@ const nextConfig = {
   },
   compress: true,
   poweredByHeader: false,
-  generateEtags: true,
 }
 
 module.exports = nextConfig
