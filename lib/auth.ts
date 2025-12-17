@@ -21,7 +21,6 @@ export const getCurrentUser = cache(async (): Promise<AuthUser | null> => {
   return {
     id: user.id,
     email: user.email!,
-    // @ts-expect-error - Supabase type inference issue
     isAdmin: profile?.is_admin ?? false,
   }
 })
