@@ -7,10 +7,4 @@
 
 [build.environment]
   NODE_VERSION = "20"
-  # Tell Netlify these env vars are safe to appear in build output
   SECRETS_SCAN_OMIT_KEYS = "SUPABASE_SERVICE_ROLE_KEY,CRON_SECRET"
-
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200

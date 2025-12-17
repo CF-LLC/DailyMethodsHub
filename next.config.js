@@ -5,14 +5,6 @@ const nextConfig = {
   eslint: {
     ignoreDuringBuilds: false,
   },
-  // Fix Netlify deployment issues
-  experimental: {
-    serverActions: {
-      bodySizeLimit: '2mb',
-    },
-  },
-  // Disable static optimization for all pages to prevent clientModules errors
-  output: 'standalone',
   images: {
     remotePatterns: [
       {
