@@ -25,7 +25,7 @@ export async function GET(request: NextRequest) {
     }
 
     if (difficulty) {
-      query = query.eq('difficulty', difficulty)
+      query = query.eq('difficulty', difficulty as 'Easy' | 'Medium' | 'Hard')
     }
 
     if (isActive !== null) {
