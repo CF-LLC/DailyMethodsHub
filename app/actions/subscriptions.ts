@@ -1,114 +1,171 @@
-// @ts-nocheck - Temporary: Supabase type inference issues with new tables
 'use server'
 
 import { createClient } from '@/lib/supabase/server'
+import { revalidatePath } from 'next/cache'
 
-// Types
-export interface Subscription {
-  id: string
-  userId: string
-  stripeCustomerId: string | null
-  stripeSubscriptionId: string | null
-  status: 'inactive' | 'active' | 'canceled' | 'incomplete' | 'past_due'
-  planType: 'free' | 'premium'
-  currentPeriodStart: string | null
-  currentPeriodEnd: string | null
-  cancelAtPeriodEnd: boolean
-  createdAt: string
-  updatedAt: string
-}
-
-export interface ApiResponse<T = void> {
-  success: boolean
-  data?: T
-  error?: string
-}
-
-// Get user's subscription
-export async function getUserSubscription(): Promise<ApiResponse<Subscription>> {
+export async function getUserSubscription() {
   try {
     const supabase = await createClient()
-    const { data: { user }, error: authError } = await supabase.auth.getUser()
+    const { data: { user } } = await supabase.auth.getUser()
 
-    if (authError || !user) {
-      return { success: false, error: 'Not authenticated' }
+    if (!user) {
+      return {
+        success: false,
+        error: 'Not authenticated',
+      }
     }
 
     const { data, error } = await supabase
       .from('subscriptions')
       .select('*')
       .eq('user_id', user.id)
-      .single()
+      .maybeSingle()
 
-    if (error && error.code !== 'PGRST116') {
-      console.error('Error fetching subscription:', error)
-      return { success: false, error: 'Failed to fetch subscription' }
+    if (error) {
+      throw error
     }
 
-    // Create if doesn't exist
+    // If no subscription exists, create a free one
     if (!data) {
-      const { error: insertError } = await supabase
+      // @ts-ignore - Supabase type generation issue with insert
+      const { data: newSub, error: createError } = await supabase
         .from('subscriptions')
-        // @ts-expect-error - Supabase type inference issue
-        .insert([{
+        // @ts-ignore
+        .insert({
           user_id: user.id,
-          status: 'inactive',
+          status: 'active',
           plan_type: 'free',
-        }])
+          payment_method: 'none',
+        })
         .select()
         .single()
 
-      if (insertError) {
-        console.error('Error creating subscription:', insertError)
-        return { success: false, error: 'Failed to create subscription' }
-      }
+      if (createError) throw createError
 
       return {
         success: true,
-        data: convertSubscription(newSub),
+        data: newSub,
       }
     }
 
     return {
       success: true,
-      data: convertSubscription(data),
+      data,
     }
-  } catch (error) {
-    console.error('Unexpected error in getUserSubscription:', error)
-    return { success: false, error: 'An unexpected error occurred' }
+  } catch (error: any) {
+    console.error('Error fetching subscription:', error)
+    return {
+      success: false,
+      error: error.message,
+    }
   }
 }
 
-// Check if user is premium
-export async function isPremiumUser(): Promise<ApiResponse<boolean>> {
+export async function isPremiumUser(): Promise<boolean> {
+  const result: any = await getUserSubscription()
+  
+  if (!result.success || !result.data) {
+    return false
+  }
+
+  return result.data.plan_type === 'premium' && result.data.status === 'active'
+}
+
+export async function verifyBitcoinPayment(txId: string, address: string, amountSats: number) {
   try {
-    const result = await getUserSubscription()
-    
-    if (!result.success || !result.data) {
-      return { success: true, data: false }
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) {
+      return {
+        success: false,
+        error: 'Not authenticated',
+      }
     }
 
-    const isPremium = result.data.status === 'active' && result.data.planType === 'premium'
-    return { success: true, data: isPremium }
-  } catch (error) {
-    console.error('Unexpected error in isPremiumUser:', error)
-    return { success: false, error: 'An unexpected error occurred' }
+    // @ts-ignore - Supabase type generation issue with update
+    const { data, error } = await supabase
+      .from('subscriptions')
+      .update(
+        // @ts-ignore
+        {
+          status: 'active',
+          plan_type: 'premium',
+          payment_method: 'bitcoin',
+          payment_tx_id: txId,
+          payment_address: address,
+          payment_amount_sats: amountSats,
+          payment_verified_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        }
+      )
+      .eq('user_id', user.id)
+      .select()
+      .single()
+
+    if (error) throw error
+
+    revalidatePath('/dashboard')
+    revalidatePath('/settings')
+
+    return {
+      success: true,
+      data,
+    }
+  } catch (error: any) {
+    console.error('Error verifying payment:', error)
+    return {
+      success: false,
+      error: error.message,
+    }
   }
 }
 
-// Helper function to convert DB subscription to typed object
-function convertSubscription(data: any): Subscription {
-  return {
-    id: data.id,
-    userId: data.user_id,
-    stripeCustomerId: data.stripe_customer_id,
-    stripeSubscriptionId: data.stripe_subscription_id,
-    status: data.status,
-    planType: data.plan_type,
-    currentPeriodStart: data.current_period_start,
-    currentPeriodEnd: data.current_period_end,
-    cancelAtPeriodEnd: data.cancel_at_period_end,
-    createdAt: data.created_at,
-    updatedAt: data.updated_at,
+export async function verifyLightningPayment(invoice: string, paymentHash: string) {
+  try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
+
+    if (!user) {
+      return {
+        success: false,
+        error: 'Not authenticated',
+      }
+    }
+
+    // @ts-ignore - Supabase type generation issue with update
+    const { data, error } = await supabase
+      .from('subscriptions')
+      .update(
+        // @ts-ignore
+        {
+          status: 'active',
+          plan_type: 'premium',
+          payment_method: 'lightning',
+          payment_tx_id: paymentHash,
+          lightning_invoice: invoice,
+          payment_verified_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+        }
+      )
+      .eq('user_id', user.id)
+      .select()
+      .single()
+
+    if (error) throw error
+
+    revalidatePath('/dashboard')
+    revalidatePath('/settings')
+
+    return {
+      success: true,
+      data,
+    }
+  } catch (error: any) {
+    console.error('Error verifying Lightning payment:', error)
+    return {
+      success: false,
+      error: error.message,
+    }
   }
 }

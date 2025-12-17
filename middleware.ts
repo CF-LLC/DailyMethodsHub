@@ -8,12 +8,16 @@ export async function middleware(request: NextRequest) {
   let response = await updateSession(request)
 
   // Check if accessing admin-only routes
-  const isAdminRoute = request.nextUrl.pathname.startsWith('/dashboard')
+  const isAdminRoute = request.nextUrl.pathname.startsWith('/admin')
   
   // Check if accessing protected routes (requires authentication)
   const isProtectedRoute = isAdminRoute ||
+                          request.nextUrl.pathname.startsWith('/dashboard') ||
                           request.nextUrl.pathname.startsWith('/earnings') ||
                           request.nextUrl.pathname.startsWith('/settings') ||
+                          request.nextUrl.pathname.startsWith('/methods') ||
+                          request.nextUrl.pathname.startsWith('/notifications') ||
+                          request.nextUrl.pathname.startsWith('/referral-hub') ||
                           request.nextUrl.pathname.startsWith('/referrals')
 
   if (isProtectedRoute) {
@@ -58,9 +62,9 @@ export async function middleware(request: NextRequest) {
         .eq('id', user.id)
         .maybeSingle()
 
-      // If not admin, redirect to earnings
+      // If not admin, redirect to dashboard
       if (!profile || profileError || !profile.is_admin) {
-        return NextResponse.redirect(new URL('/earnings', request.url))
+        return NextResponse.redirect(new URL('/dashboard', request.url))
       }
     }
   }

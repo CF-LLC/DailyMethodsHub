@@ -9,9 +9,9 @@ export default async function Home() {
   const supabase = await createClient()
   const { data: { user } } = await supabase.auth.getUser()
 
-  // If user is logged in, redirect to earnings page instead
+  // If user is logged in, redirect to dashboard
   if (user) {
-    redirect('/earnings')
+    redirect('/dashboard')
   }
 
   return (

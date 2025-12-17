@@ -1,257 +1,230 @@
-import { Metadata } from 'next'
-import { Check, X, Crown, Sparkles } from 'lucide-react'
-import CheckoutButton from '@/components/pricing/CheckoutButton'
+import Link from 'next/link'
+import { Button } from '@/components/ui/Button'
+import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/Card'
+import { Check, Bitcoin, Zap } from 'lucide-react'
 
-export const metadata: Metadata = {
-  title: 'Pricing - DailyMethodsHub',
-  description: 'Choose the perfect plan for tracking your daily earnings',
+export const metadata = {
+  title: 'Pricing | Daily Methods Hub',
+  description: 'Upgrade to premium and unlock unlimited earning methods',
 }
 
-const FREE_FEATURES = [
-  'Track unlimited daily earnings',
-  'Up to 10 custom methods',
-  'Basic analytics dashboard',
-  'Daily streak tracking',
-  'Export up to 100 entries (CSV)',
-  'In-app notifications',
-  'Referral system access',
-]
-
-const PREMIUM_FEATURES = [
-  'Everything in Free',
-  'Unlimited custom methods',
-  'Advanced analytics & insights',
-  'Priority support',
-  'Unlimited CSV export/import',
-  'Custom categories',
-  'Earnings forecasting',
-  'Ad-free experience',
-  'Early access to new features',
-]
-
-const PREMIUM_ONLY = [
-  'Advanced analytics & insights',
-  'Priority support',
-  'Unlimited CSV export/import',
-  'Custom categories',
-  'Earnings forecasting',
-  'Ad-free experience',
-  'Early access to new features',
-]
-
 export default function PricingPage() {
+  const priceBTC = process.env.NEXT_PUBLIC_PREMIUM_PRICE_BTC || '0.0005'
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 via-indigo-50 to-purple-50 dark:from-gray-900 dark:via-gray-900 dark:to-gray-800">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        {/* Header */}
-        <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
-            Simple, Transparent Pricing
-          </h1>
-          <p className="text-lg text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
-            Start free and upgrade when you need advanced features. No hidden fees, cancel anytime.
-          </p>
-        </div>
-
-        {/* Pricing Cards */}
-        <div className="grid md:grid-cols-2 gap-8 max-w-5xl mx-auto mb-16">
-          {/* Free Plan */}
-          <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border-2 border-gray-200 dark:border-gray-700 p-8">
-            <div className="mb-6">
-              <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-                Free
-              </h2>
-              <div className="flex items-baseline gap-2 mb-4">
-                <span className="text-5xl font-bold text-gray-900 dark:text-white">$0</span>
-                <span className="text-gray-600 dark:text-gray-400">/month</span>
-              </div>
-              <p className="text-gray-600 dark:text-gray-400">
-                Perfect for getting started with daily earnings tracking
-              </p>
+    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+      {/* Header */}
+      <header className="border-b bg-white/80 backdrop-blur-sm">
+        <div className="container mx-auto flex h-16 items-center justify-between px-4">
+          <Link href="/" className="flex items-center space-x-2">
+            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+              <span className="text-lg font-bold">D</span>
             </div>
+            <span className="text-lg font-semibold">Daily Methods Hub</span>
+          </Link>
+          <Link href="/dashboard">
+            <Button variant="ghost">Back to Dashboard</Button>
+          </Link>
+        </div>
+      </header>
 
-            <ul className="space-y-3 mb-8">
-              {FREE_FEATURES.map((feature, index) => (
-                <li key={index} className="flex items-start gap-3">
-                  <Check className="h-5 w-5 text-green-600 dark:text-green-400 flex-shrink-0 mt-0.5" />
-                  <span className="text-gray-700 dark:text-gray-300">{feature}</span>
+      {/* Hero Section */}
+      <section className="container mx-auto px-4 py-12 text-center">
+        <h1 className="mb-4 text-4xl font-bold md:text-5xl">
+          Unlock Your Earning Potential
+        </h1>
+        <p className="mx-auto mb-8 max-w-2xl text-lg text-muted-foreground">
+          Upgrade to premium and share your earning methods with the world. One-time payment, lifetime access.
+        </p>
+      </section>
+
+      {/* Pricing Cards */}
+      <section className="container mx-auto px-4 pb-20">
+        <div className="mx-auto grid max-w-5xl gap-8 md:grid-cols-2">
+          {/* Free Plan */}
+          <Card className="relative">
+            <CardHeader>
+              <CardTitle className="text-2xl">Free</CardTitle>
+              <div className="mt-4">
+                <span className="text-4xl font-bold">$0</span>
+                <span className="text-muted-foreground"> / forever</span>
+              </div>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-muted-foreground">
+                Perfect for getting started with your earning journey
+              </p>
+              <ul className="space-y-3">
+                <li className="flex items-start gap-2">
+                  <Check className="mt-0.5 h-5 w-5 flex-shrink-0 text-green-600" />
+                  <span>Browse public earning methods</span>
                 </li>
-              ))}
-            </ul>
-
-            <button
-              disabled
-              className="w-full px-6 py-3 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-white font-semibold rounded-lg cursor-not-allowed"
-            >
-              Current Plan
-            </button>
-          </div>
+                <li className="flex items-start gap-2">
+                  <Check className="mt-0.5 h-5 w-5 flex-shrink-0 text-green-600" />
+                  <span>Track your daily earnings</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="mt-0.5 h-5 w-5 flex-shrink-0 text-green-600" />
+                  <span>Create private methods (for personal use)</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="mt-0.5 h-5 w-5 flex-shrink-0 text-green-600" />
+                  <span>Basic support</span>
+                </li>
+              </ul>
+              <Link href="/dashboard" className="block w-full">
+                <Button variant="outline" className="w-full">
+                  Current Plan
+                </Button>
+              </Link>
+            </CardContent>
+          </Card>
 
           {/* Premium Plan */}
-          <div className="bg-gradient-to-br from-blue-600 to-indigo-700 rounded-2xl shadow-2xl border-2 border-blue-500 p-8 relative overflow-hidden">
-            {/* Popular Badge */}
-            <div className="absolute top-0 right-0 bg-yellow-400 text-gray-900 text-xs font-bold px-4 py-1 rounded-bl-lg flex items-center gap-1">
-              <Sparkles className="h-3 w-3" />
-              POPULAR
+          <Card className="relative border-primary shadow-lg">
+            <div className="absolute -top-4 left-1/2 -translate-x-1/2 rounded-full bg-primary px-4 py-1 text-sm font-semibold text-primary-foreground">
+              Most Popular
             </div>
-
-            <div className="mb-6">
-              <div className="flex items-center gap-2 mb-2">
-                <Crown className="h-6 w-6 text-yellow-400" />
-                <h2 className="text-2xl font-bold text-white">
-                  Premium
-                </h2>
+            <CardHeader>
+              <CardTitle className="text-2xl">Premium</CardTitle>
+              <div className="mt-4">
+                <span className="text-4xl font-bold">{priceBTC} BTC</span>
+                <span className="text-muted-foreground"> / lifetime</span>
               </div>
-              <div className="flex items-baseline gap-2 mb-4">
-                <span className="text-5xl font-bold text-white">$9</span>
-                <span className="text-blue-100">/month</span>
-              </div>
-              <p className="text-blue-100">
-                Unlock advanced features and maximize your earnings insights
+              <p className="text-sm text-muted-foreground">≈ $50 USD</p>
+            </CardHeader>
+            <CardContent className="space-y-4">
+              <p className="text-muted-foreground">
+                One-time payment for unlimited access forever
               </p>
-            </div>
-
-            <ul className="space-y-3 mb-8">
-              {PREMIUM_FEATURES.map((feature, index) => (
-                <li key={index} className="flex items-start gap-3">
-                  <Check className="h-5 w-5 text-yellow-400 flex-shrink-0 mt-0.5" />
-                  <span className={`${PREMIUM_ONLY.includes(feature) ? 'text-white font-medium' : 'text-blue-100'}`}>
-                    {feature}
+              <ul className="space-y-3">
+                <li className="flex items-start gap-2">
+                  <Check className="mt-0.5 h-5 w-5 flex-shrink-0 text-green-600" />
+                  <span className="font-medium">Everything in Free, plus:</span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="mt-0.5 h-5 w-5 flex-shrink-0 text-green-600" />
+                  <span>
+                    <strong>Unlimited public methods</strong> - Share your earning strategies
                   </span>
                 </li>
-              ))}
-            </ul>
+                <li className="flex items-start gap-2">
+                  <Check className="mt-0.5 h-5 w-5 flex-shrink-0 text-green-600" />
+                  <span>
+                    <strong>Referral code sharing</strong> - Earn from your referrals
+                  </span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="mt-0.5 h-5 w-5 flex-shrink-0 text-green-600" />
+                  <span>
+                    <strong>Featured in directory</strong> - Get discovered by thousands
+                  </span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="mt-0.5 h-5 w-5 flex-shrink-0 text-green-600" />
+                  <span>
+                    <strong>Priority support</strong> - Get help when you need it
+                  </span>
+                </li>
+                <li className="flex items-start gap-2">
+                  <Check className="mt-0.5 h-5 w-5 flex-shrink-0 text-green-600" />
+                  <span>
+                    <strong>Lifetime access</strong> - Pay once, use forever
+                  </span>
+                </li>
+              </ul>
 
-            <CheckoutButton />
-          </div>
+              <div className="space-y-3 pt-4">
+                <Link href="/upgrade/payment" className="block w-full">
+                  <Button className="w-full" size="lg">
+                    <Bitcoin className="mr-2 h-5 w-5" />
+                    Pay with Bitcoin
+                  </Button>
+                </Link>
+                <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+                  <Bitcoin className="h-4 w-4" />
+                  <span>Bitcoin On-Chain</span>
+                  <span>•</span>
+                  <Zap className="h-4 w-4 text-yellow-500" />
+                  <span>Lightning Network</span>
+                </div>
+              </div>
+            </CardContent>
+          </Card>
         </div>
 
-        {/* Feature Comparison Table */}
-        <div className="bg-white dark:bg-gray-800 rounded-2xl shadow-lg border border-gray-200 dark:border-gray-700 overflow-hidden max-w-4xl mx-auto mb-16">
-          <div className="p-6 border-b border-gray-200 dark:border-gray-700">
-            <h3 className="text-2xl font-bold text-gray-900 dark:text-white">
-              Feature Comparison
-            </h3>
-          </div>
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead className="bg-gray-50 dark:bg-gray-900">
-                <tr>
-                  <th className="px-6 py-4 text-left text-sm font-semibold text-gray-900 dark:text-white">
-                    Feature
-                  </th>
-                  <th className="px-6 py-4 text-center text-sm font-semibold text-gray-900 dark:text-white">
-                    Free
-                  </th>
-                  <th className="px-6 py-4 text-center text-sm font-semibold text-gray-900 dark:text-white">
-                    Premium
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-                <tr>
-                  <td className="px-6 py-4 text-gray-700 dark:text-gray-300">Custom Methods</td>
-                  <td className="px-6 py-4 text-center text-gray-600 dark:text-gray-400">Up to 10</td>
-                  <td className="px-6 py-4 text-center text-green-600 dark:text-green-400 font-semibold">Unlimited</td>
-                </tr>
-                <tr className="bg-gray-50 dark:bg-gray-900">
-                  <td className="px-6 py-4 text-gray-700 dark:text-gray-300">Daily Earnings Tracking</td>
-                  <td className="px-6 py-4 text-center"><Check className="h-5 w-5 text-green-600 dark:text-green-400 mx-auto" /></td>
-                  <td className="px-6 py-4 text-center"><Check className="h-5 w-5 text-green-600 dark:text-green-400 mx-auto" /></td>
-                </tr>
-                <tr>
-                  <td className="px-6 py-4 text-gray-700 dark:text-gray-300">Basic Analytics</td>
-                  <td className="px-6 py-4 text-center"><Check className="h-5 w-5 text-green-600 dark:text-green-400 mx-auto" /></td>
-                  <td className="px-6 py-4 text-center"><Check className="h-5 w-5 text-green-600 dark:text-green-400 mx-auto" /></td>
-                </tr>
-                <tr className="bg-gray-50 dark:bg-gray-900">
-                  <td className="px-6 py-4 text-gray-700 dark:text-gray-300">Advanced Analytics</td>
-                  <td className="px-6 py-4 text-center"><X className="h-5 w-5 text-gray-400 mx-auto" /></td>
-                  <td className="px-6 py-4 text-center"><Check className="h-5 w-5 text-green-600 dark:text-green-400 mx-auto" /></td>
-                </tr>
-                <tr>
-                  <td className="px-6 py-4 text-gray-700 dark:text-gray-300">CSV Export</td>
-                  <td className="px-6 py-4 text-center text-gray-600 dark:text-gray-400">100 entries</td>
-                  <td className="px-6 py-4 text-center text-green-600 dark:text-green-400 font-semibold">Unlimited</td>
-                </tr>
-                <tr className="bg-gray-50 dark:bg-gray-900">
-                  <td className="px-6 py-4 text-gray-700 dark:text-gray-300">Priority Support</td>
-                  <td className="px-6 py-4 text-center"><X className="h-5 w-5 text-gray-400 mx-auto" /></td>
-                  <td className="px-6 py-4 text-center"><Check className="h-5 w-5 text-green-600 dark:text-green-400 mx-auto" /></td>
-                </tr>
-                <tr>
-                  <td className="px-6 py-4 text-gray-700 dark:text-gray-300">Earnings Forecasting</td>
-                  <td className="px-6 py-4 text-center"><X className="h-5 w-5 text-gray-400 mx-auto" /></td>
-                  <td className="px-6 py-4 text-center"><Check className="h-5 w-5 text-green-600 dark:text-green-400 mx-auto" /></td>
-                </tr>
-                <tr className="bg-gray-50 dark:bg-gray-900">
-                  <td className="px-6 py-4 text-gray-700 dark:text-gray-300">Ad-Free Experience</td>
-                  <td className="px-6 py-4 text-center"><X className="h-5 w-5 text-gray-400 mx-auto" /></td>
-                  <td className="px-6 py-4 text-center"><Check className="h-5 w-5 text-green-600 dark:text-green-400 mx-auto" /></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        {/* FAQ */}
-        <div className="max-w-3xl mx-auto">
-          <h2 className="text-3xl font-bold text-gray-900 dark:text-white text-center mb-8">
+        {/* FAQ Section */}
+        <div className="mx-auto mt-16 max-w-3xl">
+          <h2 className="mb-8 text-center text-3xl font-bold">
             Frequently Asked Questions
           </h2>
           <div className="space-y-6">
-            <details className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 group">
-              <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer list-none flex items-center justify-between">
-                <span>Can I cancel my subscription anytime?</span>
-                <span className="text-gray-400 group-open:rotate-180 transition-transform">▼</span>
-              </summary>
-              <p className="text-gray-600 dark:text-gray-400 mt-4">
-                Yes! You can cancel your Premium subscription at any time. You'll continue to have access to Premium features until the end of your billing period.
-              </p>
-            </details>
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Why Bitcoin payment?</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">
+                  Bitcoin payments are fast, secure, and borderless. No credit card fees, no chargebacks, 
+                  and you maintain full privacy. We support both on-chain Bitcoin and Lightning Network 
+                  for instant, low-fee payments.
+                </p>
+              </CardContent>
+            </Card>
 
-            <details className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 group">
-              <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer list-none flex items-center justify-between">
-                <span>What payment methods do you accept?</span>
-                <span className="text-gray-400 group-open:rotate-180 transition-transform">▼</span>
-              </summary>
-              <p className="text-gray-600 dark:text-gray-400 mt-4">
-                We accept all major credit cards (Visa, MasterCard, American Express) through our secure payment processor, Stripe.
-              </p>
-            </details>
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">How long does verification take?</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">
+                  Lightning payments are typically verified within 24 hours. Bitcoin on-chain payments 
+                  are verified after 1-3 confirmations (approximately 30 minutes to 1 hour). You'll 
+                  receive an email once your premium access is activated.
+                </p>
+              </CardContent>
+            </Card>
 
-            <details className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 group">
-              <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer list-none flex items-center justify-between">
-                <span>What happens to my data if I downgrade?</span>
-                <span className="text-gray-400 group-open:rotate-180 transition-transform">▼</span>
-              </summary>
-              <p className="text-gray-600 dark:text-gray-400 mt-4">
-                All your data is preserved. If you have more than 10 methods, you'll still be able to view them, but won't be able to create new ones until you're back under the limit or upgrade again.
-              </p>
-            </details>
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Is this really lifetime access?</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">
+                  Yes! One payment gives you unlimited premium features forever. No recurring fees, 
+                  no subscriptions. Pay once and you're set for life.
+                </p>
+              </CardContent>
+            </Card>
 
-            <details className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 group">
-              <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer list-none flex items-center justify-between">
-                <span>Do you offer refunds?</span>
-                <span className="text-gray-400 group-open:rotate-180 transition-transform">▼</span>
-              </summary>
-              <p className="text-gray-600 dark:text-gray-400 mt-4">
-                We offer a 14-day money-back guarantee. If you're not satisfied with Premium within the first 14 days, contact support for a full refund.
-              </p>
-            </details>
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">Can I get a refund?</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">
+                  Due to the nature of Bitcoin transactions being irreversible, we don't offer refunds. 
+                  However, if you have any issues or concerns, please contact satoshispath@gmail.com 
+                  and we'll work with you to resolve them.
+                </p>
+              </CardContent>
+            </Card>
 
-            <details className="bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 p-6 group">
-              <summary className="font-semibold text-gray-900 dark:text-white cursor-pointer list-none flex items-center justify-between">
-                <span>Can I switch between plans?</span>
-                <span className="text-gray-400 group-open:rotate-180 transition-transform">▼</span>
-              </summary>
-              <p className="text-gray-600 dark:text-gray-400 mt-4">
-                Yes, you can upgrade to Premium at any time. The upgrade takes effect immediately. If you downgrade, changes will take effect at the end of your current billing period.
-              </p>
-            </details>
+            <Card>
+              <CardHeader>
+                <CardTitle className="text-lg">I don't have Bitcoin. What should I do?</CardTitle>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">
+                  You can easily get Bitcoin from exchanges like Coinbase, Cash App, or Strike. 
+                  For Lightning payments, Strike and Cash App are the easiest options. If you need help, 
+                  email us at satoshispath@gmail.com.
+                </p>
+              </CardContent>
+            </Card>
           </div>
         </div>
-      </div>
+      </section>
     </div>
   )
 }

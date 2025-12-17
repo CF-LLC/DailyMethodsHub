@@ -223,38 +223,68 @@ export interface Database {
         Row: {
           id: string
           user_id: string
-          stripe_customer_id: string | null
-          stripe_subscription_id: string | null
           status: string
           plan_type: string
-          current_period_start: string | null
-          current_period_end: string | null
+          payment_method: string
+          payment_tx_id: string | null
+          payment_address: string | null
+          payment_amount_sats: number | null
+          payment_verified_at: string | null
+          lightning_invoice: string | null
           created_at: string
           updated_at: string
         }
         Insert: {
           id?: string
           user_id: string
-          stripe_customer_id?: string | null
-          stripe_subscription_id?: string | null
           status: string
           plan_type: string
-          current_period_start?: string | null
-          current_period_end?: string | null
+          payment_method?: string
+          payment_tx_id?: string | null
+          payment_address?: string | null
+          payment_amount_sats?: number | null
+          payment_verified_at?: string | null
+          lightning_invoice?: string | null
           created_at?: string
           updated_at?: string
         }
         Update: {
           id?: string
           user_id?: string
-          stripe_customer_id?: string | null
-          stripe_subscription_id?: string | null
           status?: string
           plan_type?: string
-          current_period_start?: string | null
-          current_period_end?: string | null
+          payment_method?: string
+          payment_tx_id?: string | null
+          payment_address?: string | null
+          payment_amount_sats?: number | null
+          payment_verified_at?: string | null
+          lightning_invoice?: string | null
           created_at?: string
           updated_at?: string
+        }
+        Relationships: []
+      }
+      method_completions: {
+        Row: {
+          id: string
+          user_id: string
+          method_id: string
+          completed_at: string
+          created_at: string
+        }
+        Insert: {
+          id?: string
+          user_id: string
+          method_id: string
+          completed_at?: string
+          created_at?: string
+        }
+        Update: {
+          id?: string
+          user_id?: string
+          method_id?: string
+          completed_at?: string
+          created_at?: string
         }
         Relationships: []
       }

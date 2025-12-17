@@ -14,6 +14,7 @@ import {
   User,
   Bell,
   Users,
+  Shield,
 } from 'lucide-react'
 import { cn } from '@/lib/utils'
 import { Button } from '@/components/ui/Button'
@@ -26,6 +27,12 @@ const navigation = [
     name: 'Dashboard',
     href: '/dashboard',
     icon: LayoutDashboard,
+  },
+  {
+    name: 'Admin Panel',
+    href: '/admin',
+    icon: Shield,
+    adminOnly: true,
   },
   {
     name: 'Methods',
@@ -54,12 +61,22 @@ export function Sidebar() {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isCollapsed, setIsCollapsed] = useState(false)
   const [userEmail, setUserEmail] = useState<string | null>(null)
+  const [isAdmin, setIsAdmin] = useState(false)
 
   useEffect(() => {
     const getUser = async () => {
       const supabase = createClient()
       const { data: { user } } = await supabase.auth.getUser()
       setUserEmail(user?.email || null)
+      
+      if (user) {
+        const { data: profile } = await (supabase
+          .from('profiles') as any)
+          .select('is_admin')
+          .eq('id', user.id)
+          .single()
+        setIsAdmin(profile?.is_admin || false)
+      }
     }
     getUser()
   }, [])
@@ -151,6 +168,9 @@ export function Sidebar() {
           {/* Navigation */}
           <nav className={cn('flex-1 space-y-1 p-4', isCollapsed && 'px-2')}>
             {navigation.map((item) => {
+              // Skip admin-only items if user is not admin
+              if (item.adminOnly && !isAdmin) return null
+              
               const isActive = pathname === item.href
               return (
                 <Link

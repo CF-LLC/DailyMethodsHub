@@ -114,9 +114,32 @@ CREATE TABLE IF NOT EXISTS public.referral_points (
 );
 
 -- ============================================================================
+-- 9. METHOD COMPLETIONS TABLE
+-- ============================================================================
+CREATE TABLE IF NOT EXISTS public.method_completions (
+  id UUID DEFAULT gen_random_uuid() PRIMARY KEY,
+  user_id UUID NOT NULL REFERENCES public.profiles(id) ON DELETE CASCADE,
+  method_id UUID NOT NULL REFERENCES public.methods(id) ON DELETE CASCADE,
+  completed_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT timezone('utc'::text, now()) NOT NULL
+);
+
+-- ============================================================================
 -- ENABLE ROW LEVEL SECURITY
 -- ============================================================================
 ALTER TABLE public.profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.methods ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.daily_earnings ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.streaks ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.notifications ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.subscriptions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.referrals ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.referral_points ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.method_completions ENABLE ROW LEVEL SECURITY;
+
+-- ============================================================================
+-- RLS POLICIES: PROFILES
+-- ============================================================================
 ALTER TABLE public.methods ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.daily_earnings ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.streaks ENABLE ROW LEVEL SECURITY;
@@ -304,14 +327,36 @@ CREATE POLICY "Users can update their own points"
   FOR UPDATE
   USING (auth.uid() = user_id)
   WITH CHECK (auth.uid() = user_id);
-
 CREATE POLICY "Users can insert their own points"
   ON public.referral_points
   FOR INSERT
   WITH CHECK (auth.uid() = user_id);
 
 -- ============================================================================
+-- RLS POLICIES: METHOD COMPLETIONS
+-- ============================================================================
+DROP POLICY IF EXISTS "Users can view their own completions" ON public.method_completions;
+DROP POLICY IF EXISTS "Users can insert their own completions" ON public.method_completions;
+DROP POLICY IF EXISTS "Users can delete their own completions" ON public.method_completions;
+
+CREATE POLICY "Users can view their own completions"
+  ON public.method_completions
+  FOR SELECT
+  USING (auth.uid() = user_id);
+
+CREATE POLICY "Users can insert their own completions"
+  ON public.method_completions
+  FOR INSERT
+  WITH CHECK (auth.uid() = user_id);
+
+CREATE POLICY "Users can delete their own completions"
+  ON public.method_completions
+  FOR DELETE
+  USING (auth.uid() = user_id);
+
+-- ============================================================================
 -- FUNCTIONS
+-- ============================================================================
 -- ============================================================================
 
 -- Function to handle new user signup
@@ -389,16 +434,29 @@ CREATE INDEX IF NOT EXISTS idx_methods_is_active ON public.methods(is_active);
 CREATE INDEX IF NOT EXISTS idx_methods_is_public ON public.methods(is_public) WHERE is_public = true;
 CREATE INDEX IF NOT EXISTS idx_methods_created_at ON public.methods(created_at DESC);
 
--- Daily earnings indexes
-CREATE INDEX IF NOT EXISTS idx_daily_earnings_user_id ON public.daily_earnings(user_id);
-CREATE INDEX IF NOT EXISTS idx_daily_earnings_method_id ON public.daily_earnings(method_id);
-CREATE INDEX IF NOT EXISTS idx_daily_earnings_entry_date ON public.daily_earnings(entry_date);
-CREATE INDEX IF NOT EXISTS idx_daily_earnings_user_date ON public.daily_earnings(user_id, entry_date);
+-- Referral points indexes
+CREATE INDEX IF NOT EXISTS idx_referral_points_user_id ON public.referral_points(user_id);
 
--- Streaks indexes
-CREATE INDEX IF NOT EXISTS idx_streaks_user_id ON public.streaks(user_id);
+-- Method completions indexes
+CREATE INDEX IF NOT EXISTS idx_method_completions_user_id ON public.method_completions(user_id);
+CREATE INDEX IF NOT EXISTS idx_method_completions_method_id ON public.method_completions(method_id);
+CREATE INDEX IF NOT EXISTS idx_method_completions_completed_at ON public.method_completions(completed_at DESC);
+CREATE INDEX IF NOT EXISTS idx_method_completions_user_method ON public.method_completions(user_id, method_id);
 
--- Notifications indexes
+-- ============================================================================
+-- GRANT PERMISSIONS
+-- ============================================================================
+GRANT ALL ON public.profiles TO authenticated;
+GRANT ALL ON public.methods TO authenticated;
+GRANT ALL ON public.daily_earnings TO authenticated;
+GRANT ALL ON public.streaks TO authenticated;
+GRANT ALL ON public.notifications TO authenticated;
+GRANT SELECT ON public.subscriptions TO authenticated;
+GRANT ALL ON public.referrals TO authenticated;
+GRANT ALL ON public.referral_points TO authenticated;
+GRANT ALL ON public.method_completions TO authenticated;
+
+GRANT SELECT ON public.daily_earnings TO anon;
 CREATE INDEX IF NOT EXISTS idx_notifications_user_id ON public.notifications(user_id);
 CREATE INDEX IF NOT EXISTS idx_notifications_read ON public.notifications(read);
 CREATE INDEX IF NOT EXISTS idx_notifications_created_at ON public.notifications(created_at DESC);
