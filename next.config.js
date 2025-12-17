@@ -3,9 +3,16 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   eslint: {
-    // Disable deprecated ESLint options during build
     ignoreDuringBuilds: false,
   },
+  // Fix Netlify deployment issues
+  experimental: {
+    serverActions: {
+      bodySizeLimit: '2mb',
+    },
+  },
+  // Disable static optimization for all pages to prevent clientModules errors
+  output: 'standalone',
   images: {
     remotePatterns: [
       {
@@ -14,7 +21,6 @@ const nextConfig = {
       },
     ],
   },
-  // Performance optimizations
   compress: true,
   poweredByHeader: false,
   generateEtags: true,
