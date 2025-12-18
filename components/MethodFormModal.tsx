@@ -16,7 +16,7 @@ interface MethodFormModalProps {
 }
 
 const CATEGORIES = ['freelancing', 'passive', 'gig', 'online', 'investment', 'other']
-const DIFFICULTIES = ['beginner', 'intermediate', 'advanced']
+const DIFFICULTIES = ['Easy', 'Medium', 'Hard']
 
 export function MethodFormModal({ isOpen, onClose, method }: MethodFormModalProps) {
   const [formData, setFormData] = useState({
@@ -27,7 +27,7 @@ export function MethodFormModal({ isOpen, onClose, method }: MethodFormModalProp
     iconUrl: '',
     earnings: '',
     timeRequired: '',
-    difficulty: 'beginner',
+    difficulty: 'Easy',
     referralCode: '',
     isActive: true,
     isPublic: false,
@@ -47,7 +47,7 @@ export function MethodFormModal({ isOpen, onClose, method }: MethodFormModalProp
         iconUrl: method.iconUrl || '',
         earnings: method.earnings || '',
         timeRequired: method.timeRequired || '',
-        difficulty: method.difficulty || 'beginner',
+        difficulty: method.difficulty || 'Easy',
         referralCode: method.referralCode || '',
         isActive: method.isActive ?? true,
         isPublic: method.isPublic ?? false,
@@ -61,7 +61,7 @@ export function MethodFormModal({ isOpen, onClose, method }: MethodFormModalProp
         iconUrl: '',
         earnings: '',
         timeRequired: '',
-        difficulty: 'beginner',
+        difficulty: 'Easy',
         referralCode: '',
         isActive: true,
         isPublic: false,

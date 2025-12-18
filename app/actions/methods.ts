@@ -117,6 +117,31 @@ export async function createMethod(
       }
     }
 
+    // Check if user can post public methods
+    if (input.isPublic) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('is_admin')
+        .eq('id', user.id)
+        .single()
+
+      const { data: subscription } = await supabase
+        .from('subscriptions')
+        .select('plan_type, status')
+        .eq('user_id', user.id)
+        .single()
+
+      const isAdmin = profile?.is_admin ?? false
+      const isPremium = subscription?.plan_type === 'premium' && subscription?.status === 'active'
+
+      if (!isAdmin && !isPremium) {
+        return {
+          success: false,
+          error: 'Upgrade your account to post public methods',
+        }
+      }
+    }
+
     const insertData: Database['public']['Tables']['methods']['Insert'] = {
       user_id: user.id,
       title: input.title,
@@ -142,12 +167,13 @@ export async function createMethod(
       console.error('Error creating method:', error)
       return {
         success: false,
-        error: 'Failed to create method',
+        error: error.message || 'Failed to create method',
       }
     }
 
     revalidatePath('/methods')
     revalidatePath('/dashboard')
+    revalidatePath('/referral-hub')
 
     return {
       success: true,
@@ -173,10 +199,42 @@ export async function updateMethod(
   input: UpdateMethodInput
 ): Promise<ApiResponse<any>> {
   try {
-    // Require admin access
-    await requireAdmin()
-
     const supabase = await createClient()
+
+    // Get current user
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+      return {
+        success: false,
+        error: 'Not authenticated',
+      }
+    }
+
+    // Check if user can post public methods
+    if (input.isPublic) {
+      const { data: profile } = await supabase
+        .from('profiles')
+        .select('is_admin')
+        .eq('id', user.id)
+        .single()
+
+      const { data: subscription } = await supabase
+        .from('subscriptions')
+        .select('plan_type, status')
+        .eq('user_id', user.id)
+        .single()
+
+      const isAdmin = profile?.is_admin ?? false
+      const isPremium = subscription?.plan_type === 'premium' && subscription?.status === 'active'
+
+      if (!isAdmin && !isPremium) {
+        return {
+          success: false,
+          error: 'Upgrade your account to post public methods',
+        }
+      }
+    }
+
     const { id, ...updates } = input as any
 
     const updateData: any = {}
@@ -208,6 +266,7 @@ export async function updateMethod(
 
     revalidatePath('/methods')
     revalidatePath('/dashboard')
+    revalidatePath('/referral-hub')
 
     return {
       success: true,
@@ -231,25 +290,34 @@ export async function updateMethod(
 
 export async function deleteMethod(id: string): Promise<ApiResponse<boolean>> {
   try {
-    // Require admin access
-    await requireAdmin()
-
     const supabase = await createClient()
 
+    // Get current user
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+      return {
+        success: false,
+        error: 'Not authenticated',
+      }
+    }
+
+    // Delete only if the method belongs to the user
     const { error } = await supabase
       .from('methods')
       .delete()
       .eq('id', id)
+      .eq('user_id', user.id)
 
     if (error) {
       return {
         success: false,
-        error: 'Failed to delete method',
+        error: error.message || 'Failed to delete method',
       }
     }
 
     revalidatePath('/methods')
     revalidatePath('/dashboard')
+    revalidatePath('/referral-hub')
 
     return {
       success: true,
@@ -258,15 +326,9 @@ export async function deleteMethod(id: string): Promise<ApiResponse<boolean>> {
     }
   } catch (error: any) {
     console.error('Error deleting method:', error)
-    if (error.message?.includes('Forbidden')) {
-      return {
-        success: false,
-        error: 'Admin access required',
-      }
-    }
     return {
       success: false,
-      error: 'Failed to delete method',
+      error: error.message || 'Failed to delete method',
     }
   }
 }
@@ -413,18 +475,29 @@ export async function getMethodStats(): Promise<ApiResponse<any>> {
   try {
     const supabase = await createClient()
 
-    // Get total count
+    // Get current user
+    const { data: { user } } = await supabase.auth.getUser()
+    if (!user) {
+      return {
+        success: false,
+        error: 'Not authenticated',
+      }
+    }
+
+    // Get total count for this user
     const { count: totalCount } = await (supabase
       .from('methods') as any)
       .select('*', { count: 'exact', head: true })
+      .eq('user_id', user.id)
 
-    // Get active count
+    // Get active count for this user
     const { count: activeCount } = await (supabase
       .from('methods') as any)
       .select('*', { count: 'exact', head: true })
+      .eq('user_id', user.id)
       .eq('is_active', true)
 
-    // Get methods added this month
+    // Get methods added this month for this user
     const startOfMonth = new Date()
     startOfMonth.setDate(1)
     startOfMonth.setHours(0, 0, 0, 0)
@@ -432,12 +505,14 @@ export async function getMethodStats(): Promise<ApiResponse<any>> {
     const { data: thisMonthMethods } = await (supabase
       .from('methods') as any)
       .select('created_at')
+      .eq('user_id', user.id)
       .gte('created_at', startOfMonth.toISOString())
 
-    // Get methods by category
+    // Get methods by category for this user
     const { data: allMethods } = await (supabase
       .from('methods') as any)
       .select('category')
+      .eq('user_id', user.id)
 
     const categoryCount: Record<string, number> = {}
     allMethods?.forEach((method: any) => {

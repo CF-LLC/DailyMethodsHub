@@ -12,25 +12,32 @@ export async function getPublicMethods(): Promise<ApiResponse<any[]>> {
   try {
     const supabase = await createClient()
     
-    const { data, error } = await supabase
+    // Get current user (if logged in)
+    const { data: { user } } = await supabase.auth.getUser()
+    
+    // Build query to exclude user's own methods
+    let query = supabase
       .from('methods')
-      .select(`
-        *,
-        profiles:user_id (
-          email
-        )
-      `)
+      .select('*')
       .eq('is_public', true)
       .eq('is_active', true)
-      .order('created_at', { ascending: false })
+    
+    // If user is logged in, exclude their methods
+    if (user) {
+      query = query.neq('user_id', user.id)
+    }
+    
+    const { data, error } = await query.order('created_at', { ascending: false })
 
     if (error) {
       console.error('Error fetching public methods:', error)
       return {
         success: false,
-        error: 'Failed to fetch public methods',
+        error: error.message || 'Failed to fetch public methods',
       }
     }
+
+    console.log('Public methods found:', data?.length || 0)
 
     const methods = (data as any[]).map((method: any) => ({
       id: method.id,
@@ -46,7 +53,7 @@ export async function getPublicMethods(): Promise<ApiResponse<any[]>> {
       isActive: method.is_active,
       isPublic: method.is_public,
       userId: method.user_id,
-      userEmail: method.profiles?.email || 'Unknown',
+      userEmail: 'User',
       createdAt: new Date(method.created_at),
       updatedAt: new Date(method.updated_at),
     }))

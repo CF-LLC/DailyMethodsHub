@@ -64,7 +64,7 @@ export function MethodCard({
             <Clock className="h-4 w-4 text-muted-foreground" />
             <div>
               <p className="text-xs text-muted-foreground">Time</p>
-              <p className="text-sm font-medium">{method.time_required}</p>
+              <p className="text-sm font-medium">{method.timeRequired || method.time_required || 'N/A'}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
@@ -80,11 +80,11 @@ export function MethodCard({
           <span
             className={cn(
               'h-2 w-2 rounded-full',
-              method.is_active ? 'bg-green-500' : 'bg-gray-300'
+              (method.isActive ?? method.is_active) ? 'bg-green-500' : 'bg-gray-300'
             )}
           />
           <span className="text-xs text-muted-foreground">
-            {method.is_active ? 'Active' : 'Inactive'}
+            {(method.isActive ?? method.is_active) ? 'Active' : 'Inactive'}
           </span>
         </div>
       </CardContent>
