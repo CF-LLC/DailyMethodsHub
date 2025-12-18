@@ -8,10 +8,10 @@ export const dynamic = 'force-dynamic'
 // GET /api/methods/[id] - Get method by ID
 export async function GET(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
-    const { id } = await params
+    const { id } = params
     const supabase = await createClient()
 
     const { data, error } = await supabase
@@ -42,13 +42,13 @@ export async function GET(
 // PATCH /api/methods/[id] - Update method (admin only)
 export async function PATCH(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
     // Require admin access
     await requireAdmin()
 
-    const { id } = await params
+    const { id } = params
     const supabase = await createClient()
     const body = await request.json()
 
@@ -116,13 +116,13 @@ export async function PATCH(
 // DELETE /api/methods/[id] - Delete method (admin only)
 export async function DELETE(
   request: NextRequest,
-  { params }: { params: Promise<{ id: string }> }
+  { params }: { params: { id: string } }
 ) {
   try {
     // Require admin access
     await requireAdmin()
 
-    const { id } = await params
+    const { id } = params
     const supabase = await createClient()
 
     const { error } = await supabase
