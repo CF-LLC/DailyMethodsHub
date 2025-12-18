@@ -64,7 +64,7 @@ export function MethodCard({
             <Clock className="h-4 w-4 text-muted-foreground" />
             <div>
               <p className="text-xs text-muted-foreground">Time</p>
-              <p className="text-sm font-medium">{method.timeRequired || method.time_required || 'N/A'}</p>
+              <p className="text-sm font-medium">{(method as any).timeRequired || method.time_required || 'N/A'}</p>
             </div>
           </div>
           <div className="flex items-center gap-2">
