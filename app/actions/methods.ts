@@ -210,8 +210,10 @@ export async function updateMethod(
       }
     }
 
+    const { id, ...updates } = input as any
+
     // Check if user can post public methods
-    if (input.isPublic) {
+    if (updates.is_public !== undefined && updates.is_public) {
       const { data: profile } = await supabase
         .from('profiles')
         .select('is_admin')
@@ -234,8 +236,6 @@ export async function updateMethod(
         }
       }
     }
-
-    const { id, ...updates } = input as any
 
     const updateData: any = {}
     if (updates.title !== undefined) updateData.title = updates.title
