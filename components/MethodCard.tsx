@@ -80,11 +80,11 @@ export function MethodCard({
           <span
             className={cn(
               'h-2 w-2 rounded-full',
-              (method.isActive ?? method.is_active) ? 'bg-green-500' : 'bg-gray-300'
+              ((method as any).isActive ?? method.is_active) ? 'bg-green-500' : 'bg-gray-300'
             )}
           />
           <span className="text-xs text-muted-foreground">
-            {(method.isActive ?? method.is_active) ? 'Active' : 'Inactive'}
+            {((method as any).isActive ?? method.is_active) ? 'Active' : 'Inactive'}
           </span>
         </div>
       </CardContent>
