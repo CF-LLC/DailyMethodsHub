@@ -1,5 +1,3 @@
-'use server'
-
 import { cache } from 'react'
 import { createClient } from '@/lib/supabase/server'
 import { ApiResponse } from '@/types'
@@ -8,7 +6,7 @@ import { Database } from '@/types/supabase'
 type Method = Database['public']['Tables']['methods']['Row']
 
 // Helper to convert snake_case to camelCase for response
-async function convertMethod(method: Method) {
+function convertMethod(method: Method) {
   return {
     id: method.id,
     title: method.title,
@@ -59,7 +57,7 @@ export const getPublicMethods = cache(async (filters?: {
       }
     }
 
-    const methods = await Promise.all(data.map(convertMethod))
+    const methods = data.map(convertMethod)
 
     return {
       success: true,
@@ -95,7 +93,7 @@ export const getMethodById = cache(async (id: string): Promise<ApiResponse<any>>
 
     return {
       success: true,
-      data: await convertMethod(data),
+      data: convertMethod(data),
     }
   } catch (error) {
     console.error('Error in getMethodById:', error)
