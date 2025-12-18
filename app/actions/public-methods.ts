@@ -8,7 +8,7 @@ import { Database } from '@/types/supabase'
 type Method = Database['public']['Tables']['methods']['Row']
 
 // Helper to convert snake_case to camelCase for response
-function convertMethod(method: Method) {
+async function convertMethod(method: Method) {
   return {
     id: method.id,
     title: method.title,
@@ -59,7 +59,7 @@ export const getPublicMethods = cache(async (filters?: {
       }
     }
 
-    const methods = data.map(convertMethod)
+    const methods = await Promise.all(data.map(convertMethod))
 
     return {
       success: true,
@@ -95,7 +95,7 @@ export const getMethodById = cache(async (id: string): Promise<ApiResponse<any>>
 
     return {
       success: true,
-      data: convertMethod(data),
+      data: await convertMethod(data),
     }
   } catch (error) {
     console.error('Error in getMethodById:', error)
