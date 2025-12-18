@@ -32,13 +32,18 @@ export default async function Home() {
           <p className="mt-6 text-lg leading-8 text-muted-foreground max-w-2xl mx-auto">
             Track and manage your income opportunities in one place. From surveys to cashback, find the best ways to earn money online.
           </p>
-          <div className="mt-10 flex items-center justify-center gap-4">
+          <div className="mt-10 flex items-center justify-center gap-4 flex-wrap">
             <Link href="/signup">
               <Button size="lg">Get started for free</Button>
             </Link>
             <Link href="/login">
               <Button size="lg" variant="outline">
                 Sign in
+              </Button>
+            </Link>
+            <Link href="/pricing">
+              <Button size="lg" variant="ghost">
+                View Pricing
               </Button>
             </Link>
           </div>

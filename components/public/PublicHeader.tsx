@@ -21,11 +21,14 @@ export function PublicHeader() {
           <Link href="/#methods" className="text-gray-600 hover:text-gray-900 transition-colors">
             Methods
           </Link>
+          <Link href="/pricing" className="text-gray-600 hover:text-gray-900 transition-colors">
+            Pricing
+          </Link>
           <Link
             href="/auth/login"
             className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 transition-colors"
           >
-            Admin
+            Sign In
           </Link>
         </nav>
 
@@ -33,7 +36,7 @@ export function PublicHeader() {
           href="/auth/login"
           className="md:hidden rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white"
         >
-          Admin
+          Sign In
         </Link>
       </div>
     </header>
