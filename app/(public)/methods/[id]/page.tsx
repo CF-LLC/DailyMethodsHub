@@ -8,13 +8,14 @@ import { LoadingSpinner } from '@/components/ui/LoadingSpinner'
 import { generateMethodJsonLd } from '@/lib/seo'
 
 interface MethodPageProps {
-  params: {
+  params: Promise<{
     id: string
-  }
+  }>
 }
 
 export async function generateMetadata({ params }: MethodPageProps): Promise<Metadata> {
-  const result = await getMethodById(params.id)
+  const { id } = await params
+  const result = await getMethodById(id)
 
   if (!result.success || !result.data) {
     return {
@@ -51,7 +52,8 @@ async function RelatedMethodsContent({ category, currentId }: { category: string
 }
 
 export default async function MethodPage({ params }: MethodPageProps) {
-  const result = await getMethodById(params.id)
+  const { id } = await params
+  const result = await getMethodById(id)
 
   if (!result.success || !result.data) {
     notFound()
