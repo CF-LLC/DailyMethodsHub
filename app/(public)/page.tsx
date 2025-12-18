@@ -7,6 +7,9 @@ import { SearchBar } from '@/components/public/SearchBar'
 import { getPublicMethods } from '@/app/actions/public-methods'
 import { LoadingSpinner } from '@/components/ui/LoadingSpinner'
 
+export const runtime = 'nodejs'
+export const dynamic = 'force-dynamic'
+
 export const metadata: Metadata = {
   title: 'Daily Methods Hub - Discover Ways to Earn Money Online',
   description: 'Find the best methods to earn money online. Explore surveys, freelancing, passive income, and more. Start earning today!',
