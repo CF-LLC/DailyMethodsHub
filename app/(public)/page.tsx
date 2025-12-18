@@ -1,5 +1,7 @@
 import { Suspense } from 'react'
 import { Metadata } from 'next'
+import { redirect } from 'next/navigation'
+import { createClient } from '@/lib/supabase/server'
 import { Hero } from '@/components/public/Hero'
 import { MethodGrid } from '@/components/public/MethodGrid'
 import { CategoryFilter } from '@/components/public/CategoryFilter'
@@ -35,7 +37,15 @@ async function MethodsContent({ category, search }: { category?: string; search?
   return <MethodGrid methods={methods} />
 }
 
-export default function HomePage({ searchParams }: HomePageProps) {
+export default async function HomePage({ searchParams }: HomePageProps) {
+  // Check if user is logged in and redirect to dashboard
+  const supabase = await createClient()
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (user) {
+    redirect('/dashboard')
+  }
+
   const category = searchParams.category
   const search = searchParams.search
 
