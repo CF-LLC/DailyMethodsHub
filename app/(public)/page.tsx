@@ -82,15 +82,6 @@ export default async function Home() {
           </div>
         </div>
       </main>
-
-      {/* Footer */}
-      <footer className="relative border-t bg-white/80 backdrop-blur-sm mt-20 z-10">
-        <div className="container mx-auto px-4 py-8">
-          <p className="text-center text-sm text-muted-foreground">
-            © 2024 Daily Methods Hub. All rights reserved.
-          </p>
-        </div>
-      </footer>
     </div>
   )
 }

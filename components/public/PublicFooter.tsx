@@ -34,13 +34,18 @@ export function PublicFooter() {
                 </Link>
               </li>
               <li>
-                <Link href="/#methods" className="hover:text-white transition-colors">
-                  All Methods
+                <Link href="/referral-hub" className="hover:text-white transition-colors">
+                  Referral Hub
                 </Link>
               </li>
               <li>
-                <Link href="/auth/login" className="hover:text-white transition-colors">
-                  Admin Login
+                <Link href="/pricing" className="hover:text-white transition-colors">
+                  Pricing
+                </Link>
+              </li>
+              <li>
+                <Link href="/login" className="hover:text-white transition-colors">
+                  Sign In
                 </Link>
               </li>
             </ul>
@@ -51,23 +56,23 @@ export function PublicFooter() {
             <h3 className="mb-4 font-semibold text-white">Categories</h3>
             <ul className="space-y-2 text-sm">
               <li>
-                <Link href="/?category=freelancing" className="hover:text-white transition-colors">
-                  Freelancing
+                <Link href="/signup" className="hover:text-white transition-colors">
+                  Get Started
                 </Link>
               </li>
               <li>
-                <Link href="/?category=passive" className="hover:text-white transition-colors">
-                  Passive Income
+                <Link href="/referral-hub" className="hover:text-white transition-colors">
+                  Browse Methods
                 </Link>
               </li>
               <li>
-                <Link href="/?category=gig" className="hover:text-white transition-colors">
-                  Gig Economy
+                <Link href="/dashboard" className="hover:text-white transition-colors">
+                  Dashboard
                 </Link>
               </li>
               <li>
-                <Link href="/?category=online" className="hover:text-white transition-colors">
-                  Online Work
+                <Link href="/pricing" className="hover:text-white transition-colors">
+                  View Pricing
                 </Link>
               </li>
             </ul>
