@@ -1,10 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
-  // Disable static page generation entirely for Netlify
-  generateBuildId: async () => {
-    return 'build-' + Date.now()
-  },
+  output: 'standalone',
   eslint: {
     ignoreDuringBuilds: false,
   },
