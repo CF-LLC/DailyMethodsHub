@@ -22,26 +22,6 @@ export default async function Home() {
       {/* Floating crypto and currency icons */}
       <FloatingIcons />
       
-      {/* Header */}
-      <header className="relative border-b bg-white/80 backdrop-blur-sm z-10">
-        <div className="container mx-auto flex h-16 items-center justify-between px-4">
-          <div className="flex items-center space-x-2">
-            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-              <span className="text-lg font-bold">D</span>
-            </div>
-            <span className="text-lg font-semibold">Daily Methods Hub</span>
-          </div>
-          <div className="flex items-center gap-4">
-            <Link href="/login">
-              <Button variant="ghost">Sign in</Button>
-            </Link>
-            <Link href="/signup">
-              <Button>Get started</Button>
-            </Link>
-          </div>
-        </div>
-      </header>
-
       {/* Hero */}
       <main className="relative container mx-auto px-4 py-20 z-10">
         <div className="text-center">
