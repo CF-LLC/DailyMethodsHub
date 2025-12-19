@@ -44,8 +44,8 @@ async function PaymentContent() {
     const lightningAddress = process.env.NEXT_PUBLIC_LIGHTNING_ADDRESS || 'spock@speed.app'
     const priceBTC = process.env.NEXT_PUBLIC_PREMIUM_PRICE_BTC || '0.0005'
 
-  return (
-    <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
+    return (
+      <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
       {/* Header */}
       <header className="border-b bg-white/80 backdrop-blur-sm">
         <div className="container mx-auto flex h-16 items-center justify-between px-4">
@@ -253,19 +253,16 @@ async function PaymentContent() {
                 </CardContent>
               </Card>
             </div>
-  } catch (error) {
-    console.error('Payment page error:', error)
-    redirect('/dashboard')
-  }
           </div>
         </div>
       </main>
     </div>
   )
+  } catch (error) {
+    console.error('Payment page error:', error)
+    redirect('/dashboard')
+  }
 }
-      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
-        <LoadingSpinner />
-      </div>
     
 
 export default function PaymentPage() {
