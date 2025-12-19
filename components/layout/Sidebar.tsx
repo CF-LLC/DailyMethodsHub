@@ -28,8 +28,7 @@ const navigation = [
     icon: LayoutDashboard,
   },
   {
-    name: 'Admin Panel',
-    href: 'Referral Hub',
+    name: 'Referral Hub',
     href: '/referral-hub',
     icon: Users,
   },
@@ -42,7 +41,8 @@ const navigation = [
   {
     name: 'Methods',
     href: '/methods',
-    icon: List
+    icon: List,
+  },
   {
     name: 'Settings',
     href: '/settings',
