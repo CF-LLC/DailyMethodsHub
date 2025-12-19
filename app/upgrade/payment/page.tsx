@@ -16,28 +16,33 @@ export const metadata = {
 }
 
 async function PaymentContent() {
-  const supabase = await createClient()
-  const { data: { user } } = await supabase.auth.getUser()
+  try {
+    const supabase = await createClient()
+    const { data: { user } } = await supabase.auth.getUser()
 
-  if (!user) {
-    redirect('/login?redirect=/upgrade/payment')
-  }
+    if (!user) {
+      redirect('/login?redirect=/upgrade/payment')
+    }
 
-  // Check if already premium
-  const { data: subscription } = await supabase
-    .from('subscriptions')
-    .select('*')
-    .eq('user_id', user.id)
-    .maybeSingle()
+    // Check if already premium
+    const { data: subscription, error: subError } = await supabase
+      .from('subscriptions')
+      .select('*')
+      .eq('user_id', user.id)
+      .maybeSingle()
 
-  const sub = subscription as { plan_type: string; status: string } | null
-  if (sub && sub.plan_type === 'premium' && sub.status === 'active') {
-    redirect('/dashboard')
-  }
+    if (subError) {
+      console.error('Subscription fetch error:', subError)
+    }
 
-  const bitcoinAddress = process.env.NEXT_PUBLIC_BITCOIN_ADDRESS || 'bc1qppss95e83m3hg69spfdwsrmagzgymg8mjuxn25'
-  const lightningAddress = process.env.NEXT_PUBLIC_LIGHTNING_ADDRESS || 'spock@speed.app'
-  const priceBTC = process.env.NEXT_PUBLIC_PREMIUM_PRICE_BTC || '0.0005'
+    const sub = subscription as { plan_type: string; status: string } | null
+    if (sub && sub.plan_type === 'premium' && sub.status === 'active') {
+      redirect('/dashboard')
+    }
+
+    const bitcoinAddress = process.env.NEXT_PUBLIC_BITCOIN_ADDRESS || 'bc1qppss95e83m3hg69spfdwsrmagzgymg8mjuxn25'
+    const lightningAddress = process.env.NEXT_PUBLIC_LIGHTNING_ADDRESS || 'spock@speed.app'
+    const priceBTC = process.env.NEXT_PUBLIC_PREMIUM_PRICE_BTC || '0.0005'
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100">
@@ -248,12 +253,20 @@ async function PaymentContent() {
                 </CardContent>
               </Card>
             </div>
+  } catch (error) {
+    console.error('Payment page error:', error)
+    redirect('/dashboard')
+  }
           </div>
         </div>
       </main>
     </div>
   )
 }
+      <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
+        <LoadingSpinner />
+      </div>
+    
 
 export default function PaymentPage() {
   return (
