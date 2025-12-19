@@ -146,7 +146,7 @@ export function SettingsContent() {
               </div>
             </div>
             
-            {subscription?.plan_type === 'free' && !isAdmin && (
+            {(!subscription || subscription?.plan_type === 'free' || !subscription?.plan_type) && !isAdmin && (
               <div className="rounded-lg border-2 border-blue-200 bg-blue-50 p-4 dark:border-blue-900 dark:bg-blue-950">
                 <div className="flex items-start gap-3">
                   <DollarSign className="h-6 w-6 text-blue-600 dark:text-blue-400 flex-shrink-0 mt-0.5" />
