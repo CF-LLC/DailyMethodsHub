@@ -35,8 +35,8 @@ async function PaymentContent() {
     redirect('/dashboard')
   }
 
-  const bitcoinAddress = process.env.NEXT_PUBLIC_BITCOIN_ADDRESS
-  const lightningAddress = process.env.NEXT_PUBLIC_LIGHTNING_ADDRESS
+  const bitcoinAddress = process.env.NEXT_PUBLIC_BITCOIN_ADDRESS || 'bc1qppss95e83m3hg69spfdwsrmagzgymg8mjuxn25'
+  const lightningAddress = process.env.NEXT_PUBLIC_LIGHTNING_ADDRESS || 'spock@speed.app'
   const priceBTC = process.env.NEXT_PUBLIC_PREMIUM_PRICE_BTC || '0.0005'
 
   return (
