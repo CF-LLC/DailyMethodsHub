@@ -71,15 +71,21 @@ export async function isPremiumUser(): Promise<boolean> {
   return result.data.plan_type === 'premium' && result.data.status === 'active'
 }
 
-export async function verifyBitcoinPayment(txId: string, address: string, amountSats: number) {
+export async function verifyBitcoinPayment(userEmail: string, txId: string, address: string, amountSats: number) {
   try {
     const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    
+    // Find the user by email (the customer, not the admin)
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('id')
+      .eq('email', userEmail)
+      .single()
 
-    if (!user) {
+    if (profileError || !profile) {
       return {
         success: false,
-        error: 'Not authenticated',
+        error: 'User not found with that email',
       }
     }
 
@@ -99,7 +105,7 @@ export async function verifyBitcoinPayment(txId: string, address: string, amount
           updated_at: new Date().toISOString(),
         }
       )
-      .eq('user_id', user.id)
+      .eq('user_id', profile.id)
       .select()
       .single()
 
@@ -121,15 +127,21 @@ export async function verifyBitcoinPayment(txId: string, address: string, amount
   }
 }
 
-export async function verifyLightningPayment(invoice: string, paymentHash: string) {
+export async function verifyLightningPayment(userEmail: string, invoice: string, paymentHash: string) {
   try {
     const supabase = await createClient()
-    const { data: { user } } = await supabase.auth.getUser()
+    
+    // Find the user by email (the customer, not the admin)
+    const { data: profile, error: profileError } = await supabase
+      .from('profiles')
+      .select('id')
+      .eq('email', userEmail)
+      .single()
 
-    if (!user) {
+    if (profileError || !profile) {
       return {
         success: false,
-        error: 'Not authenticated',
+        error: 'User not found with that email',
       }
     }
 
@@ -148,7 +160,7 @@ export async function verifyLightningPayment(invoice: string, paymentHash: strin
           updated_at: new Date().toISOString(),
         }
       )
-      .eq('user_id', user.id)
+      .eq('user_id', profile.id)
       .select()
       .single()
 

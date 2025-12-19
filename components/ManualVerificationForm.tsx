@@ -7,6 +7,7 @@ import { verifyBitcoinPayment, verifyLightningPayment } from '@/app/actions/subs
 
 export default function ManualVerificationForm() {
   const [paymentMethod, setPaymentMethod] = useState<'bitcoin' | 'lightning'>('lightning')
+  const [userEmail, setUserEmail] = useState('')
   const [txId, setTxId] = useState('')
   const [address, setAddress] = useState('')
   const [amountSats, setAmountSats] = useState('50000')
@@ -22,14 +23,15 @@ export default function ManualVerificationForm() {
     try {
       let result
       if (paymentMethod === 'bitcoin') {
-        result = await verifyBitcoinPayment(txId, address, parseInt(amountSats))
+        result = await verifyBitcoinPayment(userEmail, txId, address, parseInt(amountSats))
       } else {
-        result = await verifyLightningPayment(invoice, paymentHash)
+        result = await verifyLightningPayment(userEmail, invoice, paymentHash)
       }
 
       if (result.success) {
         setMessage('✅ User upgraded to premium successfully!')
         // Clear form
+        setUserEmail('')
         setTxId('')
         setAddress('')
         setInvoice('')
@@ -53,6 +55,24 @@ export default function ManualVerificationForm() {
         </p>
       </CardHeader>
       <CardContent className="space-y-4">
+        {/* User Email */}
+        <div>
+          <label className="mb-2 block text-sm font-medium">
+            User Email <span className="text-red-500">*</span>
+          </label>
+          <input
+            type="email"
+            value={userEmail}
+            onChange={(e) => setUserEmail(e.target.value)}
+            placeholder="user@example.com"
+            className="w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+            required
+          />
+          <p className="mt-1 text-xs text-muted-foreground">
+            The email address of the user who made the payment
+          </p>
+        </div>
+
         {/* Payment Method Selection */}
         <div>
           <label className="mb-2 block text-sm font-medium">Payment Method</label>
@@ -158,7 +178,7 @@ export default function ManualVerificationForm() {
         {/* Verify Button */}
         <Button
           onClick={handleVerify}
-          disabled={loading || (paymentMethod === 'bitcoin' && (!txId || !address))}
+          disabled={loading || !userEmail || (paymentMethod === 'bitcoin' && (!txId || !address)) || (paymentMethod === 'lightning' && !invoice)}
           className="w-full"
         >
           {loading ? 'Verifying...' : 'Verify Payment & Upgrade User'}
@@ -180,10 +200,10 @@ export default function ManualVerificationForm() {
           <p className="font-medium mb-2">Instructions:</p>
           <ol className="space-y-1 text-muted-foreground">
             <li>1. User sends payment to your Bitcoin/Lightning address</li>
-            <li>2. User emails proof to satoshispath@gmail.com with their account email</li>
+            <li>2. User emails proof to satoshispath@gmail.com with their <strong>account email</strong></li>
             <li>3. Verify payment in your wallet</li>
-            <li>4. Enter transaction details above</li>
-            <li>5. Click verify - user gets upgraded instantly!</li>
+            <li>4. Enter their account email and transaction details above</li>
+            <li>5. Click verify - that specific user gets upgraded instantly!</li>
           </ol>
         </div>
       </CardContent>
