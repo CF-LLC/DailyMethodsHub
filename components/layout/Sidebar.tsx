@@ -12,7 +12,6 @@ import {
   ChevronLeft,
   ChevronRight,
   User,
-  Bell,
   Users,
   Shield,
 } from 'lucide-react'
@@ -30,6 +29,12 @@ const navigation = [
   },
   {
     name: 'Admin Panel',
+    href: 'Referral Hub',
+    href: '/referral-hub',
+    icon: Users,
+  },
+  {
+    name: 'Admin Panel',
     href: '/admin',
     icon: Shield,
     adminOnly: true,
@@ -37,18 +42,7 @@ const navigation = [
   {
     name: 'Methods',
     href: '/methods',
-    icon: List,
-  },
-  {
-    name: 'Referral Hub',
-    href: '/referral-hub',
-    icon: Users,
-  },
-  {
-    name: 'Notifications',
-    href: '/notifications',
-    icon: Bell,
-  },
+    icon: List
   {
     name: 'Settings',
     href: '/settings',

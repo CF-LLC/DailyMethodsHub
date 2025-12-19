@@ -20,27 +20,31 @@ export default function PricingPage() {
             <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
               <span className="text-lg font-bold">D</span>
             </div>
-            <span className="text-lg font-semibold">Daily Methods Hub</span>
+            <span className="text-base sm:text-lg font-semibold hidden xs:inline">Daily Methods Hub</span>
+            <span className="text-base sm:text-lg font-semibold xs:hidden">DMH</span>
           </Link>
           <Link href="/dashboard">
-            <Button variant="ghost">Back to Dashboard</Button>
+            <Button variant="ghost" size="sm" className="text-sm">
+              <span className="hidden sm:inline">Back to Dashboard</span>
+              <span className="sm:hidden">Dashboard</span>
+            </Button>
           </Link>
         </div>
       </header>
 
       {/* Hero Section */}
-      <section className="container mx-auto px-4 py-12 text-center">
-        <h1 className="mb-4 text-4xl font-bold md:text-5xl">
+      <section className="container mx-auto px-4 py-8 sm:py-12 text-center">
+        <h1 className="mb-4 text-3xl sm:text-4xl md:text-5xl font-bold leading-tight">
           Unlock Your Earning Potential
         </h1>
-        <p className="mx-auto mb-8 max-w-2xl text-lg text-muted-foreground">
+        <p className="mx-auto mb-6 sm:mb-8 max-w-2xl text-base sm:text-lg text-muted-foreground px-4">
           Upgrade to premium and share your earning methods with the world. One-time payment, lifetime access.
         </p>
       </section>
 
       {/* Pricing Cards */}
-      <section className="container mx-auto px-4 pb-20">
-        <div className="mx-auto grid max-w-5xl gap-8 md:grid-cols-2">
+      <section className="container mx-auto px-4 pb-12 sm:pb-20">
+        <div className="mx-auto grid max-w-5xl gap-6 sm:gap-8 md:grid-cols-2">
           {/* Free Plan */}
           <Card className="relative">
             <CardHeader>

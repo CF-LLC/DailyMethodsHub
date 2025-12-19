@@ -92,24 +92,24 @@ export default function ReferralHubList({ initialMethods }: ReferralHubListProps
   return (
     <div className="space-y-8">
       {/* Hero Header */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-br from-primary/90 to-primary p-8 text-primary-foreground shadow-xl">
+      <div className="relative overflow-hidden rounded-xl sm:rounded-2xl bg-gradient-to-br from-primary/90 to-primary p-6 sm:p-8 text-primary-foreground shadow-xl">
         <div className="relative z-10">
-          <div className="flex items-center gap-3 mb-4">
-            <div className="flex h-12 w-12 items-center justify-center rounded-full bg-white/20 backdrop-blur">
-              <Gift className="h-6 w-6" />
+          <div className="flex items-center gap-3 mb-3 sm:mb-4">
+            <div className="flex h-10 w-10 sm:h-12 sm:w-12 items-center justify-center rounded-full bg-white/20 backdrop-blur">
+              <Gift className="h-5 w-5 sm:h-6 sm:w-6" />
             </div>
-            <h1 className="text-4xl font-bold">Referral Hub</h1>
+            <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold">Referral Hub</h1>
           </div>
-          <p className="text-lg text-primary-foreground/90 max-w-2xl">
+          <p className="text-base sm:text-lg text-primary-foreground/90 max-w-2xl">
             Discover exclusive methods with referral codes. Earn more together by sharing and using community referrals!
           </p>
-          <div className="flex items-center gap-6 mt-6">
-            <div className="flex items-center gap-2">
-              <Users className="h-5 w-5" />
+          <div className="flex flex-wrap items-center gap-4 sm:gap-6 mt-4 sm:mt-6">
+            <div className="flex items-center gap-2 text-sm sm:text-base">
+              <Users className="h-4 w-4 sm:h-5 sm:w-5" />
               <span className="font-semibold">{initialMethods.length} Methods</span>
             </div>
-            <div className="flex items-center gap-2">
-              <TrendingUp className="h-5 w-5" />
+            <div className="flex items-center gap-2 text-sm sm:text-base">
+              <TrendingUp className="h-4 w-4 sm:h-5 sm:w-5" />
               <span className="font-semibold">Community Curated</span>
             </div>
           </div>
@@ -164,11 +164,11 @@ export default function ReferralHubList({ initialMethods }: ReferralHubListProps
           </p>
         </div>
       ) : (
-        <div className="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+        <div className="grid gap-4 sm:gap-6 md:grid-cols-2 xl:grid-cols-3">
           {filteredMethods.map((method) => (
             <div
               key={method.id}
-              className="group relative border-2 rounded-xl p-6 bg-card hover:shadow-xl hover:border-primary/50 transition-all duration-300 overflow-hidden"
+              className="group relative border-2 rounded-lg sm:rounded-xl p-4 sm:p-6 bg-card hover:shadow-xl hover:border-primary/50 transition-all duration-300 overflow-hidden"
             >
               {/* Premium badge for methods with referral codes */}
               {method.referralCode && (
